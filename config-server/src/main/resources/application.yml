@@ -1,0 +1,28 @@
+server:
+  port: 8888 # C?ng chu?n cho Config Server
+
+spring:
+  application:
+    name: config-server # T�n ??nh danh c?a ch�nh Config Server
+  profiles:
+    active: git # Kích hoạt profile
+
+  cloud:
+    config:
+      server:
+        git:
+          # --- QUAN TR?NG: Thay th? ???ng d?n n�y b?ng ???ng d?n TH?C T? ---
+          # --- ??n th? m?c Git repository b?n ?� t?o ? B??c 2.1 ---
+          # V� d? macOS/Linux: uri: file:///Users/your_username/elearning-config-repo
+          # V� d? Windows:     uri: file:///C:/Users/your_username/elearning-config-repo
+          # V� d? Windows kh�c: uri: file:///C:/projects/elearning-config-repo
+          uri: /media/datnm/Data/Java/e-learning-platform # <--- THAY ??I ???NG D?N N�Y!
+
+          default-label: main
+          clone-on-start: true
+          force-pull: true # Lu�n k�o thay ??i m?i nh?t t? repo khi c� y�u c?u (h?u �ch cho dev)
+          # skip-ssl-validation: true # N?u d�ng HTTPS v?i self-signed cert (kh�ng c?n cho file://)
+
+eureka:
+  client:
+    enabled: false
