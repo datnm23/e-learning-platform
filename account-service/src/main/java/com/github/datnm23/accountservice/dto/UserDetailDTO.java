@@ -4,20 +4,20 @@ import com.github.datnm23.accountservice.statics.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
-public class UserDetailDto {
+public class UserDetailDTO {
     // Thông tin User
     private UUID userId;
     private String email;
     private String firstName;
     private String lastName;
     private String fullName;
-    private Boolean isActive;
-    private Boolean isEmailVerified;
-    private LocalDateTime createdAt;
+    private boolean active;
+    private boolean emailVerified;
+    private OffsetDateTime createdAt;
 
     // Thông tin UserProfile
     private String avatarUrl;
@@ -26,6 +26,9 @@ public class UserDetailDto {
     private Gender gender;
     private String phone;
     private String address;
-    private Boolean emailNotifications;
-    private Boolean pushNotifications;
+    private String city;
+    private String country;
+    private String language;
+    private boolean emailNotifications;
+    private boolean pushNotifications;
 }

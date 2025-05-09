@@ -1,22 +1,34 @@
 package com.github.datnm23.accountservice.event;
 
-import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
-@Getter
-public class UserRegisteredEvent extends ApplicationEvent {
-    private final UUID userId;
-    private final String email;
-    private final String firstName;
-    private final String lastName;
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString
+@Schema(description = "Sự kiện được phát sinh khi một tài khoản User mới được tạo thành công.")
+public class UserRegisteredEvent extends UserDomainEvent {
 
-    public UserRegisteredEvent(Object source, UUID userId, String email, String firstName, String lastName) {
-        super(source);
-        this.userId = userId;
+    @Schema(description = "Địa chỉ email của user mới")
+    private String email;
+
+    @Schema(description = "Tên của user mới")
+    private String firstName;
+
+    @Schema(description = "Họ của user mới")
+    private String lastName;
+
+    private static final String eventType = "USER_REGISTERED";
+
+    public UserRegisteredEvent(UUID userId, String email, String firstName, String lastName) {
+        super(UUID.randomUUID(), Instant.now(), userId, UserRegisteredEvent.class.getSimpleName());
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
 }

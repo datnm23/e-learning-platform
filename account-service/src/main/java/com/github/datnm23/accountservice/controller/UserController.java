@@ -1,180 +1,127 @@
 package com.github.datnm23.accountservice.controller;
-import com.github.datnm23.accountservice.dto.UserDetailDto;
-import com.github.datnm23.accountservice.dto.UserDto;
-import com.github.datnm23.accountservice.dto.UserRegistrationDto;
-import com.github.datnm23.accountservice.dto.UserUpdateDto;
+
+import com.github.datnm23.accountservice.dto.UserCreateDTO;
+import com.github.datnm23.accountservice.dto.UserDTO;
+import com.github.datnm23.accountservice.dto.UserUpdateDTO;
+import com.github.datnm23.accountservice.exception.ActionNotAllowedException;
+import com.github.datnm23.accountservice.exception.UserNotFoundException;
 import com.github.datnm23.accountservice.service.UserService;
+import com.github.datnm23.accountservice.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/users")
-@Tag(name = "User Management", description = "Operations for managing user accounts")
 @RequiredArgsConstructor
+@Slf4j
+@Tag(name = "User Management", description = "APIs for managing user accounts")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
-    @Operation(summary = "Create a new user", description = "Creates a new user with basic information")
-    @ApiResponse(responseCode = "201", description = "User created successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid input data")
-    @ApiResponse(responseCode = "409", description = "Email already exists")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
-        UserDto createdUser = userService.createUser(registrationDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    @Operation(summary = "Register a new user account")
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
+        log.info("Received request to register user with email: {}", userCreateDTO.getEmail());
+        UserDTO createdUser = userService.createUser(userCreateDTO);
+        URI location = URI.create(String.format("/api/v1/users/%s", createdUser.getUserId()));
+        return ResponseEntity.created(location).body(createdUser);
+    }
+
+    @PostMapping("/verify-email")
+    @Operation(summary = "Verify user email with a token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email verified successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid or expired token")
+    })
+    public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
+        log.info("Received request to verify email with token starting with: {}", token.substring(0, Math.min(token.length(), 10)));
+        boolean success = userService.verifyEmail(token);
+        if (success) {
+            return ResponseEntity.ok("Email verified successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid or expired verification token.");
+        }
+    }
+    
+    @PostMapping("/resend-verification-email")
+    @Operation(summary = "Resend verification email to the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verification email resend request processed"),
+            @ApiResponse(responseCode = "400", description = "Invalid request (e.g., email not provided)"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "403", description = "Action not allowed (e.g., email already verified)")
+    })
+    public ResponseEntity<String> resendVerificationEmail(@RequestParam("email") String email) {
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body("Email parameter is required.");
+        }
+        log.info("Received request to resend verification email for: {}", email);
+        try {
+            userService.resendVerificationEmail(email);
+            return ResponseEntity.ok("Verification email resend request processed. Please check your inbox.");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (ActionNotAllowedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 
     @GetMapping("/{userId}")
-    @Operation(summary = "Get user by ID", description = "Retrieves basic user information by ID")
-    @ApiResponse(responseCode = "200", description = "User found")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<UserDto> getUserById(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId) {
-        return userService.getUserById(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @Operation(summary = "Get user details by ID")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.name or @userService.isOwner(#userId, authentication.principal)")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID userId) {
+        log.debug("Received request to get user by ID: {}", userId);
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @GetMapping("/{userId}/details")
-    @Operation(summary = "Get user details", description = "Retrieves complete user information including profile")
-    @ApiResponse(responseCode = "200", description = "User details found")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<UserDetailDto> getUserDetails(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId) {
-        UserDetailDto userDetail = userService.getUserDetails(userId);
-        return ResponseEntity.ok(userDetail);
-    }
-
-    @GetMapping("/email/{email}")
-    @Operation(summary = "Get user by email", description = "Retrieves user by email address")
-    @ApiResponse(responseCode = "200", description = "User found")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<UserDto> getUserByEmail(
-            @Parameter(description = "Email address", required = true)
-            @PathVariable String email) {
-        return userService.getUserByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/me")
+    @Operation(summary = "Get the currently authenticated user's account details")
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        UUID currentUserId = SecurityUtils.getRequiredCurrentUserId();
+        return ResponseEntity.ok(userService.getUserById(currentUserId));
     }
 
     @GetMapping
-    @Operation(summary = "List users", description = "Retrieves paginated list of users")
-    @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
-    public ResponseEntity<PageResponse<UserDto>> getUsers(
-            @Parameter(description = "Page number (0-based)")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size")
-            @RequestParam(defaultValue = "20") int size) {
-        PageResponse<UserDto> users = userService.getUsers(page, size);
-        return ResponseEntity.ok(users);
+    @Operation(summary = "Get all users (Paginated)")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @PageableDefault(size = 20, sort = "email") Pageable pageable) {
+        log.debug("Received request to get all users (Admin) with pagination: {}", pageable);
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
-    @GetMapping("/search")
-    @Operation(summary = "Search users", description = "Searches users by name or email")
-    @ApiResponse(responseCode = "200", description = "Search results retrieved")
-    public ResponseEntity<PageResponse<UserDto>> searchUsers(
-            @Parameter(description = "Search query")
-            @RequestParam String query,
-            @Parameter(description = "Page number (0-based)")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size")
-            @RequestParam(defaultValue = "20") int size) {
-        PageResponse<UserDto> results = userService.searchUsers(query, page, size);
-        return ResponseEntity.ok(results);
-    }
-
-    @PutMapping("/{userId}")
-    @Operation(summary = "Update user", description = "Updates basic user information")
-    @ApiResponse(responseCode = "200", description = "User updated successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    public ResponseEntity<UserDto> updateUser(
-            @Parameter(description = "User UUID", required = true)
+    @PatchMapping("/{userId}")
+    @Operation(summary = "Update user details")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.name or @userService.isOwner(#userId, authentication.principal)")
+    public ResponseEntity<UserDTO> updateUser(
             @PathVariable UUID userId,
-            @Valid @RequestBody UserUpdateDto updateDto) {
-        UserDto updatedUser = userService.updateUser(userId, updateDto);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @PutMapping("/{userId}/profile")
-    @Operation(summary = "Update user profile", description = "Updates user profile information")
-    @ApiResponse(responseCode = "200", description = "Profile updated successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    public ResponseEntity<UserProfileDto> updateUserProfile(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId,
-            @Valid @RequestBody UserProfileUpdateDto profileUpdateDto) {
-        UserProfileDto updatedProfile = userService.updateUserProfile(userId, profileUpdateDto);
-        return ResponseEntity.ok(updatedProfile);
-    }
-
-    @PutMapping("/{userId}/activate")
-    @Operation(summary = "Activate user", description = "Activates a deactivated user account")
-    @ApiResponse(responseCode = "200", description = "User activated successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> activateUser(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId) {
-        UserDto activatedUser = userService.activateUser(userId);
-        return ResponseEntity.ok(activatedUser);
-    }
-
-    @PutMapping("/{userId}/deactivate")
-    @Operation(summary = "Deactivate user", description = "Deactivates an active user account")
-    @ApiResponse(responseCode = "200", description = "User deactivated successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> deactivateUser(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId) {
-        UserDto deactivatedUser = userService.deactivateUser(userId);
-        return ResponseEntity.ok(deactivatedUser);
-    }
-
-    @PutMapping("/{userId}/verify-email")
-    @Operation(summary = "Verify email", description = "Marks user email as verified")
-    @ApiResponse(responseCode = "200", description = "Email verified successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> verifyEmail(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId) {
-        UserDto verifiedUser = userService.verifyEmail(userId);
-        return ResponseEntity.ok(verifiedUser);
+            @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+        log.info("Received request to update user ID: {}", userId);
+        return ResponseEntity.ok(userService.updateUser(userId, userUpdateDTO));
     }
 
     @DeleteMapping("/{userId}")
-    @Operation(summary = "Delete user", description = "Soft deletes a user account")
-    @ApiResponse(responseCode = "204", description = "User deleted successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteUser(
-            @Parameter(description = "User UUID", required = true)
-            @PathVariable UUID userId,
-            @Parameter(description = "Admin UUID performing the deletion", required = true)
-            @RequestParam UUID adminId) {
-        userService.deleteUser(userId, adminId);
+    @Operation(summary = "Soft delete a user by ID")
+    @PreAuthorize("hasRole('ADMIN') or @userService.isOwner(#userId, authentication)")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
+        UUID actorId = SecurityUtils.getCurrentUserId().orElse(userId);
+        userService.deleteUser(userId, actorId);
         return ResponseEntity.noContent().build();
     }
-
-    @PutMapping("/{userId}/restore")
-    @Operation(summary = "Restore user", description = "Restores a previously deleted user account")
-    @ApiResponse(responseCode = "204", description = "User restored successfully")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @PreAuthorize("hasRole('ADMIN'
+}

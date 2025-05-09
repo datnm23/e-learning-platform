@@ -1,28 +1,21 @@
 server:
-  port: 8888 # C?ng chu?n cho Config Server
+  port: 8888 # Port chuẩn cho Config Server
 
 spring:
   application:
-    name: config-server # T�n ??nh danh c?a ch�nh Config Server
+    name: config-server # Tên định danh của chính Config Server
   profiles:
-    active: git # Kích hoạt profile
-
+    # Thay đổi profile active từ 'git' sang 'native'
+    active: native
   cloud:
     config:
       server:
-        git:
-          # --- QUAN TR?NG: Thay th? ???ng d?n n�y b?ng ???ng d?n TH?C T? ---
-          # --- ??n th? m?c Git repository b?n ?� t?o ? B??c 2.1 ---
-          # V� d? macOS/Linux: uri: file:///Users/your_username/elearning-config-repo
-          # V� d? Windows:     uri: file:///C:/Users/your_username/elearning-config-repo
-          # V� d? Windows kh�c: uri: file:///C:/projects/elearning-config-repo
-          uri: /media/datnm/Data/Java/e-learning-platform # <--- THAY ??I ???NG D?N N�Y!
-
-          default-label: main
-          clone-on-start: true
-          force-pull: true # Lu�n k�o thay ??i m?i nh?t t? repo khi c� y�u c?u (h?u �ch cho dev)
-          # skip-ssl-validation: true # N?u d�ng HTTPS v?i self-signed cert (kh�ng c?n cho file://)
-
+        # Cấu hình cho profile 'native'
+        native:
+          # Chỉ định đường dẫn tương đối đến thư mục chứa config
+          # '${user.dir}' tham chiếu đến thư mục gốc của dự án nơi lệnh được chạy
+          search-locations: file:///${user.dir}/local-config-repo
 eureka:
   client:
+    # Config server không cần đăng ký với Eureka
     enabled: false

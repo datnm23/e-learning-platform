@@ -30,6 +30,11 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mongo-db:
     image: mongo:latest
@@ -40,14 +45,26 @@ services:
       - mongo_data:/data/db
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis-cache:
-    image: redis:8.0-M04-alpine3.21
+    image: redis:alpine #redis:8.0-M04-alpine3.21
     container_name: redis_cache
     ports:
       - "6379:6379"
+    volumes: #volume cho redis
+      - redis_data:/data
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # --- Search Engine ---
   elasticsearch:
@@ -64,6 +81,11 @@ services:
       - es_data:/usr/share/elasticsearch/data
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # --- Messaging ---
   zookeeper:
@@ -75,6 +97,11 @@ services:
       - "2181:2181"
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD-SHELL", "echo 'ruok' | nc localhost 2181 | grep imok" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   kafka:
     image: confluentinc/cp-kafka:7.6.5
@@ -95,12 +122,36 @@ services:
       # KAFKA_CREATE_TOPICS: "topic1:1:1,topic2:1:1" # Tùy chọn: Tự tạo topics khi khởi động
     networks:
       - spring-cloud-network
+    healthcheck: # Healthcheck đơn giản cho Kafka
+      test: [ "CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list" ]
+      interval: 30s # Check ít thường xuyên hơn
+      timeout: 10s
+      retries: 5
 
 volumes: # Khai báo volumes để giữ dữ liệu khi container bị xóa/tạo lại
   mysql_data:
   mongo_data:
+  redis_data:
   es_data:
 
 networks: # Định nghĩa network chung cho các service
   spring-cloud-network:
     driver: bridge
+
+# Service Eureka tạm thời bị loại bỏ, sẽ chạy riêng ở bước sau
+#  eureka-server:
+#    image: eureka-server:1.0.0
+#    container_name: eureka_server
+#    hostname: eureka-server
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      SPRING_SECURITY_USER_NAME: admin
+#      SPRING_SECURITY_USER_PASSWORD: eureka123
+#    networks:
+#      - spring-cloud-network
+#    healthcheck:
+#      test: [ "CMD", "wget", "--spider", "http://localhost:8761/actuator/health" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3

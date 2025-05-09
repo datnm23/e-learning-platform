@@ -1,18 +1,13 @@
-server:
-  port: 8761
-
 spring:
   application:
     name: eureka-server
-  security:
-    user:
-      name: admin         # Enable basic auth
-      password: eureka123
-eureka:
-  instance:
-    hostname: eureka-server
-  client:
-    register-with-eureka: false # Eureka Server kh�ng c?n t? ??ng k� v?i ch�nh n�
-    fetch-registry: false # Eureka Server kh�ng c?n l?y registry t? ch�nh n�
-    service-url:
-      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+  config:
+    import: "configserver:http://localhost:8888"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 6 # Số lần thử lại tối đa
+        initial-interval: 1000 # Chờ 1 giây trước lần thử đầu tiên
+        multiplier: 1.1 # Tăng thời gian chờ mỗi lần thử
+        max-interval: 2000 # Thời gian chờ tối đa giữa các lần thử

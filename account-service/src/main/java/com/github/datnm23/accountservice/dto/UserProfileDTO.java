@@ -4,10 +4,12 @@ import com.github.datnm23.accountservice.statics.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
-public class UserProfileDto {
+public class UserProfileDTO {
+    
     private UUID userId;
     private String avatarUrl;
     private String bio;
@@ -15,6 +17,14 @@ public class UserProfileDto {
     private Gender gender;
     private String phone;
     private String address;
-    private Boolean emailNotifications;
-    private Boolean pushNotifications;
+    private String city;
+    private String country;
+    private String language;
+
+    private boolean emailNotifications;
+    private boolean pushNotifications;
+
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime deletedAt;
 }

@@ -1,24 +1,29 @@
 package com.github.datnm23.accountservice.event;
 
-import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
-@Getter
-public class UserUpdatedEvent extends ApplicationEvent {
-    private final UUID userId;
-    private final String email;
-    private final String firstName;
-    private final String lastName;
-    private final boolean activeStatusChanged;
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Schema(description = "Sự kiện được phát sinh khi thông tin cơ bản (firstName, lastName) của User được cập nhật.")
+public class UserUpdatedEvent extends UserDomainEvent {
 
-    public UserUpdatedEvent(Object source, UUID userId, String email, String firstName, String lastName, boolean activeStatusChanged) {
-        super(source);
-        this.userId = userId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.activeStatusChanged = activeStatusChanged;
+    @Schema(description = "Tên mới (nếu được cập nhật)", nullable = true)
+    private String updatedFirstName;
+
+    @Schema(description = "Họ mới (nếu được cập nhật)", nullable = true)
+    private String updatedLastName;
+
+    private static final String eventType = "USER_UPDATED";
+
+    public UserUpdatedEvent(UUID userId, String updatedFirstName, String updatedLastName) {
+        super(UUID.randomUUID(), Instant.now(), userId, UserUpdatedEvent.class.getSimpleName());
+        this.updatedFirstName = updatedFirstName;
+        this.updatedLastName = updatedLastName;
     }
 }

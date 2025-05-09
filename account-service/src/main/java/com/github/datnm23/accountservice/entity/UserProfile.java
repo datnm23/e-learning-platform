@@ -1,34 +1,39 @@
 package com.github.datnm23.accountservice.entity;
 
 import com.github.datnm23.accountservice.statics.Gender;
-import com.github.datnm23.accountservice.statics.ValidationPatterns;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_profiles")
+@Table(name = "user_profiles",
+        indexes = @Index(name = "idx_profile_lang", columnList = "language"))
 @SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserProfile {
 
     @Id
-    @Column(name = "user_id", length = 36)
+    @Column(name = "user_id", length = 36, nullable = false, updatable = false)
     private UUID userId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(length = 512)
     private String avatarUrl;
@@ -46,32 +51,35 @@ public class UserProfile {
     @Column(length = 20)
     private String phone;
 
+    @Column
+    private String address;
+
+    @Column(length = 100)
+    private String city;
+
+    @Column(length = 100)
+    private String country;
+
+    @Column(length = 10)
+    private String language;
+
     @Column(nullable = false)
     private boolean emailNotifications = true;
 
     @Column(nullable = false)
     private boolean pushNotifications = true;
 
-    @Column
-    private String address;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
+    @Column(updatable = false)
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
-    private LocalDateTime deletedAt;
+    private OffsetDateTime deletedAt;
 
     public void softDelete() {
-        this.deletedAt = LocalDateTime.now();
+        this.deletedAt = OffsetDateTime.now();
     }
 
     public void restore() {

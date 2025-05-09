@@ -1,0 +1,53 @@
+# Cấu hình riêng cho Account Service
+server:
+  port: 8081
+
+spring:
+  application:
+    name: account-service # Tên định danh service trên Eureka, prefix Redis
+  datasource:
+    url: jdbc:mysql://mysql-db:3306/account_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC # Cho Docker container
+    username: root # Username từ docker-compose.yml
+    password: 123 # Password từ docker-compose.yml
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+   security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/realms/elearning/protocol/openid-connect/certs
+  data:
+    redis: # Redis
+      host: localhost # ${REDIS_HOST:localhost}
+      port: 6379 #${REDIS_PORT:6379}
+      # password: ${REDIS_PASSWORD:}
+      lettuce:
+        pool:
+          max-active: 8
+  cache:
+    type: redis
+
+app:
+  security:
+    jwt:
+      authorities-claim-name: realm_access.roles #nếu dùng Keycloak và roles trong realm_access
+      userid-claim-name: sub # Nếu 'sub' chứa UserID (UUID string)
+  kafka:
+    topic:
+      user-registered: user-registered-topic
+      user-updated: user-updated-topic
+      user-profile-updated: user-profile-updated-topic
+  cache:
+    prefix: ${spring.application.name}
+    default-ttl: 15m
+    user-cache:
+      ttl: 30m                       # TTL for 'userCache'
+    oauth-provider-cache:
+      ttl: 60m                       # TTL for 'oauthProviderCache'

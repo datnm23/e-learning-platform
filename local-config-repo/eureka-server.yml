@@ -1,0 +1,13 @@
+server:
+  port: 8761 # Cổng chuẩn cho Eureka Server
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    register-with-eureka: false # Không tự đăng ký với chính nó
+    fetch-registry: false # Không lấy registry từ chính nó
+  server:
+    wait-time-in-ms-when-sync-empty: 5 # Giảm thời gian chờ đợi sync ban đầu

@@ -1,35 +1,26 @@
 package com.github.datnm23.accountservice.event;
 
-import com.github.datnm23.accountservice.statics.Gender;
-import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.time.LocalDate;
+import java.util.Map;
+import java.util.UUID;
 
-@Getter
-public class UserProfileUpdatedEvent extends ApplicationEvent {
-    private final String avatarUrl;
-    private final String bio;
-    private final LocalDate dateOfBirth;
-    private final Gender gender;
-    private final String phone;
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Schema(description = "Sự kiện được phát sinh khi cập nhật thông tin User")
+public class UserProfileUpdatedEvent extends UserDomainEvent {
 
-    private final String address;
+    @Schema(description = "Các trường đã thay đổi và giá trị mới")
+    private Map<String, Object> changedFields;
 
-    private final Boolean emailNotifications;
-    private final Boolean pushNotifications;
-
-    public UserProfileUpdatedEvent(Object source, String avatarUrl, String bio, LocalDate dateOfBirth, Gender gender,
-                                   String phone, String address, Boolean emailNotifications, Boolean pushNotifications) {
-        super(source);
-        this.avatarUrl = avatarUrl;
-        this.bio = bio;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.phone = phone;
-        this.address = address;
-        this.emailNotifications = emailNotifications;
-        this.pushNotifications = pushNotifications;
+    public UserProfileUpdatedEvent(UUID userId, Map<String, Object> changedFields) {
+        super(UUID.randomUUID(), java.time.Instant.now(), userId, UserProfileUpdatedEvent.class.getSimpleName());
+        this.changedFields = changedFields;
     }
-
 }

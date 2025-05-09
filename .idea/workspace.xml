@@ -4,7 +4,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d31e2f14-0e0c-462a-838d-1075a8bac95a" name="Changes" comment="" />
+    <list default="true" id="d31e2f14-0e0c-462a-838d-1075a8bac95a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/DuplicateResourceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/AccountServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/AccountServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserDetailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserDetailDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserProfileDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserProfileDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserProfileUpdateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserProfileUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserRegistrationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserRegistrationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserUpdateDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/dto/UserUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/entity/UserProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/entity/UserProfile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserProfileUpdatedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserProfileUpdatedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserRegisteredEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserRegisteredEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserUpdatedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/event/UserUpdatedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/EmailAlreadyExistsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/EmailAlreadyExistsException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/ResourceNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/UserNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/UserNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/exception/handler/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserDetailMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserProfileMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/mapper/UserProfileMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/repository/UserProfileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/repository/UserProfileRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/UserProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/UserProfileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/statics/AccountStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/java/com/github/datnm23/accountservice/statics/AccountStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/account-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/java/com/github/datnm23/configserver/ConfigServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/java/com/github/datnm23/configserver/ConfigServerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +54,7 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
+        <option value="Exception" />
         <option value="Class" />
       </list>
     </option>
@@ -22,19 +62,34 @@
   <component name="FormatOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2tohfPxNtzrDe6toe24xtuOj890" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.AccountServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.ConfigServerApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.EurekaServerApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/media/datnm/Data/Java/e-learning-platform/account-service&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -45,14 +100,54 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;spring&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
 }</component>
-  <component name="RunManager">
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.AccountServiceApplication">
     <configuration name="AccountServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="account-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.datnm23.accountservice.AccountServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="api-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.datnm23.apigateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="config-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.datnm23.configserver.ConfigServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="eureka-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.datnm23.eurekaserver.EurekaServerApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -61,12 +156,23 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpringProfilesService">
+    <option name="activeProfiles">
+      <map>
+        <entry key="account-service" value="dev" />
+        <entry key="api-gateway" value="dev" />
+        <entry key="config-server" value="dev" />
+        <entry key="e-learning-platform" value="dev" />
+        <entry key="eureka-server" value="dev" />
+      </map>
+    </option>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="d31e2f14-0e0c-462a-838d-1075a8bac95a" name="Changes" comment="" />
@@ -97,11 +203,37 @@
       <workItem from="1743476199740" duration="19000" />
       <workItem from="1743476230082" duration="1317000" />
       <workItem from="1743486530875" duration="1523000" />
+      <workItem from="1744261490285" duration="2613000" />
+      <workItem from="1744360349401" duration="11926000" />
+      <workItem from="1744771518996" duration="12000" />
+      <workItem from="1744771546367" duration="4538000" />
+      <workItem from="1745047556729" duration="126000" />
+      <workItem from="1745047710207" duration="936000" />
+      <workItem from="1745050510417" duration="3919000" />
+      <workItem from="1745073623404" duration="1645000" />
+      <workItem from="1745242993957" duration="1836000" />
+      <workItem from="1745313808822" duration="1207000" />
+      <workItem from="1745393173724" duration="6417000" />
+      <workItem from="1745508268528" duration="7656000" />
+      <workItem from="1745566078900" duration="19391000" />
+      <workItem from="1745825703413" duration="6005000" />
+      <workItem from="1745851011917" duration="621000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

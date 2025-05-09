@@ -1,38 +1,46 @@
 package com.github.datnm23.accountservice.service;
 
 import com.github.datnm23.accountservice.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
-    UserDto createUser(UserRegistrationDto registrationDto);
+    UserDTO createUser(UserCreateDTO userCreateDTO);
 
-    UserDto updateUser(UserUpdateDto userUpdateDto);
+    UserDTO updateUser(UUID userId, UserUpdateDTO userUpdateDTO);
 
-    UserDetailDto getUserDetails(UUID userId);
+    UserDetailDTO getUserDetails(UUID userId);
 
-    Optional<UserDto> getUserById(UUID userId);
+    UserDTO getUserById(UUID userId);
 
-    Optional<UserDto> getUserByEmail(String email);
+    UserDTO getUserByEmail(String email);
 
-    PageResponse<UserDto> getUsers(int page, int size);
+    PageResponse<UserDTO> getUsers(int page, int size);
 
-    PageResponse<UserDto> searchUsers(String query, int page, int size);
+    PageResponse<UserDTO> searchUsers(String query, int page, int size);
 
-    UserDto activeUser(UUID userId);
+    UserDTO activeUser(UUID userId);
 
-    UserDto deactivateUser(UUID userId);
+    UserDTO deactivateUser(UUID userId);
 
-    UserDto verifyEmail(UUID userId);
+    UserDTO verifyEmail(UUID userId);
 
-    void deleteUser(UUID userId, UUID deletedByUserId);
+    void deleteUser(UUID userId, UUID deletedBy);
 
     void restoreUser(UUID userId);
 
     boolean isEmailAvailable(String email);
 
-    List<UserDto> getAllUsers();
+    List<UserDTO> getAllUsers();
 
+    Page<UserDTO> getAllUsers(Pageable pageable);
+
+    boolean verifyEmail(String token);
+
+    void resendVerificationEmail(String email);
+
+    boolean isOwner(UUID targetUserId, Object principal);
 }

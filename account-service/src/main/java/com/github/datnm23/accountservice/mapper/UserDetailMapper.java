@@ -1,6 +1,6 @@
 package com.github.datnm23.accountservice.mapper;
 
-import com.github.datnm23.accountservice.dto.UserDetailDto;
+import com.github.datnm23.accountservice.dto.UserDetailDTO;
 import com.github.datnm23.accountservice.entity.User;
 import com.github.datnm23.accountservice.entity.UserProfile;
 import org.mapstruct.*;
@@ -18,8 +18,8 @@ public interface UserDetailMapper {
     @Mapping(target = "firstName", source = "user.firstName")
     @Mapping(target = "lastName", source = "user.lastName")
     @Mapping(target = "fullName", source = "user.fullName")
-    @Mapping(target = "isActive", source = "user.isActive")
-    @Mapping(target = "isEmailVerified", source = "user.isEmailVerified")
+    @Mapping(target = "active", source = "user.active")
+    @Mapping(target = "emailVerified", source = "user.emailVerified")
     @Mapping(target = "createdAt", source = "user.createdAt")
 
     @Mapping(target = "avatarUrl", source = "userProfile.avatarUrl")
@@ -30,10 +30,10 @@ public interface UserDetailMapper {
     @Mapping(target = "address", source = "userProfile.address")
     @Mapping(target = "emailNotifications", source = "userProfile.emailNotifications")
     @Mapping(target = "pushNotifications", source = "userProfile.pushNotifications")
-    UserDetailDto toDetailDto(User user, UserProfile userProfile);
+    UserDetailDTO toDetailDto(User user, UserProfile userProfile);
 
     // Map list users và profiles sang detail DTOs
-    default List<UserDetailDto> toDetailDtoList(List<User> users, List<UserProfile> profiles) {
+    default List<UserDetailDTO> toDetailDtoList(List<User> users, List<UserProfile> profiles) {
         // This would need a custom implementation to match users with their profiles
         throw new UnsupportedOperationException("This method requires a custom implementation");
     }

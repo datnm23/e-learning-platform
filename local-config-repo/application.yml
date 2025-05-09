@@ -1,0 +1,82 @@
+# Cấu hình chung cho tất cả các services CHẠY TRÊN HOST
+
+spring:
+  datasource: # MySQL
+    url: jdbc:mysql://localhost:3306/?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: 123 # Đảm bảo khớp với docker-compose
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb: # MongoDB
+      uri: mongodb://localhost:27017/
+    redis: # Redis
+      host: localhost
+      port: 6379
+  elasticsearch: # Elasticsearch
+    uris: http://localhost:9200
+  cache:
+    type: redis
+
+  kafka: # Kafka
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: default-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: basic
+  circuitbreaker:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      securityServiceClient:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+  retry:
+    instances:
+      securityServiceClient:
+        maxAttempts: 3
+        waitDuration: 100ms
+        retryExceptions:
+          - feign.FeignException.InternalServerError
+          - java.io.IOException
+          
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+# Cấu hình chung khác
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.github.datnm23: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO

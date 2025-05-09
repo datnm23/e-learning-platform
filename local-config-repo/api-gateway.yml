@@ -1,0 +1,48 @@
+server:
+  port: 8080 # Cổng cho Gateway
+
+spring:
+  application:
+    name: api-gateway # Nhắc lại tên ứng dụng
+
+  cloud:
+    gateway:
+      # --- Định tuyến dựa trên khám phá dịch vụ (Eureka)
+      discovery:
+        locator:
+          enabled: true # Tự động tạo route dựa trên serviceId từ Eureka
+          lower-case-service-id: true # Chuyển serviceId sang chữ thường cho URL (ví dụ: ACCOUNT-SERVICE -> /account-service/**)
+
+      # --- (Tùy chọn) Định tuyến thủ công (có kiểm soát hơn) ---
+      # Bạn có thể dùng cách này thay thế hoặc bổ sung cho discovery locator
+      # routes:
+      #   - id: account_service_route # Tên route tùy ý
+      #     uri: lb://ACCOUNT-SERVICE # lb://<SERVICE_ID_TRONG_EUREKA>
+      #     predicates:
+      #       - Path=/api/account/** # Pattern URL khớp với route này
+      #     # filters: # Có thể thêm filter cho route này (ví dụ: loại bỏ prefix)
+      #     #  - StripPrefix=1 # Bỏ đi /api/account khi chuyển tiếp request
+
+      #   - id: security_service_route
+      #     uri: lb://SECURITY-SERVICE
+      #     predicates:
+      #       - Path=/api/security/**
+
+      #   # ... Thêm các route cho các service khác ...
+      #   - id: course_service_route
+      #     uri: lb://COURSE-SERVICE
+      #     predicates:
+      #       - Path=/api/courses/**
+
+eureka:
+  client:
+    # Địa chỉ Eureka Server
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    # Gateway cũng nên đăng ký để các service khác có thể gọi lại nếu cần (ít dùng)
+    register-with-eureka: true
+    fetch-registry: true # Gateway cần lấy registry để định tuyến (lb://)
+  instance:
+    # Tên hiển thị trong Eureka Dashboard
+    # instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
